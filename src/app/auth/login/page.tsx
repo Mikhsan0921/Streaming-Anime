@@ -5,11 +5,11 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <section className="w-full max-w-md bg-white rounded-xl shadow-xl p-8 transform transition-all duration-300 ease-in-out">
-      <div className="flex justify-start items-center mb-6 ml-20 ">
-        <img
-          className="h-12 mr-2 ml-2"
-          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-          alt="logo"
+        <div className="flex justify-start items-center mb-6 ml-20 ">
+          <img
+            className="h-12 mr-2 ml-2"
+            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+            alt="logo"
           />
           <span className="text-3xl font-semibold text-gray-900">Admin</span>
         </div>
@@ -52,15 +52,12 @@ const Login = () => {
           </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <input  
+              <input
                 id="remember"
                 type="checkbox"
                 className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
               />
-              <label
-                htmlFor="remember"
-                className="ml-2 text-sm text-gray-600"
-              >
+              <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
                 Remember me
               </label>
             </div>
@@ -81,7 +78,10 @@ const Login = () => {
           </div>
           <p className="text-center text-sm text-gray-500">
             Don’t have an account yet?{" "}
-            <Link href="/auth/signup" className="font-medium text-blue-600 hover:underline">
+            <Link
+              href="/auth/signup"
+              className="font-medium text-blue-600 hover:underline"
+            >
               Sign up
             </Link>
           </p>
