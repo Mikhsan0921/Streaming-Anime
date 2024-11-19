@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button, Input } from "@nextui-org/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
@@ -12,8 +12,9 @@ const Login = () => {
     password: "",
   });
   const [visiblePassword, setVisiblePassword] = useState(false);
-  const [error, setError] = useState<string | null>(null); 
-  const router = useRouter(); 
+  const [error, setError] = useState<string | null>(null);
+  const [cookies, setCookies] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,12 +24,21 @@ const Login = () => {
     }));
   };
 
+  const setCookie = (name: string, value: string, days: number) => {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+  };
+
+  const getCookies = () => {
+    return document.cookie; 
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); 
+    setError(null);
 
     try {
-      
       const response = await fetch("/api/user/login", {
         method: "POST",
         headers: {
@@ -44,16 +54,12 @@ const Login = () => {
 
       const data = await response.json();
       const { user } = data;
-      
-      console.log(data);
 
-
-      localStorage.setItem("authToken", JSON.stringify(user));
-
-      console.log("Login successful, token stored:", user);
+      setCookie("authToken", JSON.stringify(user), 1); 
+      console.log("Login successful, token stored in cookies:", user);
+      alert("Login successful!");
 
       router.push("/admin/anime");
-      console.log(JSON.parse(localStorage.getItem("authToken") || ""));
 
 
     } catch (err: any) {
@@ -100,11 +106,18 @@ const Login = () => {
           </Button>
           <p className="text-center text-sm text-gray-500">
             Don’t have an account yet?{" "}
-            <Link href="/auth/signup" className="color-text- font-medium text-blue-600 hover:underline">
+            <Link href="/auth/signup" className="font-medium text-blue-600 hover:underline">
               Sign up
             </Link>
           </p>
         </form>
+
+        {cookies && (
+          <div className="mt-4 text-center">
+            <h3>Cookies:</h3>
+            <pre>{cookies}</pre>
+          </div>
+        )}
       </section>
     </div>
   );
