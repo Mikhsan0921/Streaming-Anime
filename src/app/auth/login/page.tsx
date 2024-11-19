@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button, Input } from "@nextui-org/react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const Login = () => {
     password: "",
   });
   const [visiblePassword, setVisiblePassword] = useState(false);
+  const [error, setError] = useState<string | null>(null); 
+  const router = useRouter(); 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,23 +23,60 @@ const Login = () => {
     }));
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null); 
+
+    try {
+      
+      const response = await fetch("/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Login failed");
+      }
+
+      const data = await response.json();
+      const { user } = data;
+      
+      console.log(data);
+
+
+      localStorage.setItem("authToken", JSON.stringify(user));
+
+      console.log("Login successful, token stored:", user);
+
+      router.push("/admin/anime");
+      console.log(JSON.parse(localStorage.getItem("authToken") || ""));
+
+
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-screen">
-      <section className="w-full max-w-md bg-content2 rounded-xl shadow-xl p-8 transform transition-all duration-300 ease-in-out">
-        <div className="flex justify-start items-center mb-6 ml-20 ">
-          <img
-            className="h-12 mr-2 ml-2"
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-            alt="logo"
-          />
-          <span className="text-3xl font-semibold">Admin</span>
-        </div>
+      <section className="w-full max-w-md bg-content2 rounded-xl shadow-xl p-8">
+        <h1 className="text-xl font-bold text-center mb-6">Sign in to your account</h1>
 
-        <h1 className="text-xl font-bold text-center mb-6">
-          Sign in to your account
-        </h1>
-        <form className="space-y-6">
-          <Input required name="username" id="username" label="Username" />
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            required
+            name="username"
+            id="username"
+            label="Username"
+            value={formData.username}
+            onChange={handleChange}
+          />
           <Input
             required
             type={visiblePassword ? "text" : "password"}
@@ -55,18 +95,13 @@ const Login = () => {
               </Button>
             }
           />
-          <div>
-            <Button fullWidth type="submit">
-              Login
-            </Button>
-          </div>
+          <Button type="submit" fullWidth>
+            Login
+          </Button>
           <p className="text-center text-sm text-gray-500">
             Don’t have an account yet?{" "}
-            <Link
-              href="/auth/register"
-              className="font-medium text-blue-600 hover:underline"
-            >
-              Register
+            <Link href="/auth/signup" className="color-text- font-medium text-blue-600 hover:underline">
+              Sign up
             </Link>
           </p>
         </form>

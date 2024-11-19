@@ -1,5 +1,6 @@
 import { createConnection } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { parse } from "url";
 
 // CREATE: Add a new genre
 export const POST = async (req: Request) => {
@@ -18,11 +19,31 @@ export const POST = async (req: Request) => {
     }
 };
 
-// READ: Get all genres
-export const GET = async () => {
+// READ: Get all genresimport { createConnection } from "@/lib/db";
+export const GET = async (req: Request) => {
     try {
         const db = await createConnection();
-        const [rows] = await db.query("SELECT * FROM genre");
+        const { searchParams } = new URL(req.url);
+        const id_genre = searchParams.get("id");
+        const search = searchParams.get("search");
+
+        let query = "SELECT * FROM genre";
+        let values: any[] = [];
+
+        if (id_genre) {
+            query += " WHERE id_genre = ?";
+            values.push(id_genre);
+        } else if (search) {
+            query += " WHERE label LIKE ?";
+            values.push(`%${search}%`);
+        }
+
+        const [rows]: any = await db.query(query, values);
+
+        if (id_genre && rows.length === 0) {
+            return NextResponse.json({ message: "Genre not found" }, { status: 404 });
+        }
+
         return NextResponse.json({ data: rows });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });

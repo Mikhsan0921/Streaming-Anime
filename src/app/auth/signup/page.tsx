@@ -1,113 +1,152 @@
+"use client";
+
 import Link from "next/link";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [visiblePassword, setVisiblePassword] = useState(false);
+  const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+          email: "example@example.com",
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Registration failed");
+      }
+
+      const data = await response.json();
+      console.log("User registered successfully:", data);
+
+      setFormData({
+        username: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setError("");
+
+      alert("User registered successfully!");
+    } catch (err: any) {
+      console.error("Error during registration:", err);
+      setError(err.message);
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <section className="w-full max-w-md bg-white rounded-xl shadow-xl p-8 transform transition-all duration-300 ease-in-out">
-        
-        <h1 className="text-xl font-bold text-center text-gray-900 mb-6">
+    <div className="flex justify-center items-center h-screen">
+      <section className="w-full max-w-md bg-content2 rounded-xl shadow-xl p-8 transform transition-all duration-300 ease-in-out">
+        <div className="flex justify-start items-center mb-6 ml-20 ">
+          <img
+            className="h-12 mr-2 ml-2"
+            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+            alt="logo"
+          />
+          <span className="text-3xl font-semibold">Admin</span>
+        </div>
+
+        <h1 className="text-xl font-bold text-center mb-6">
           Create an account
         </h1>
 
-        <form className="space-y-6">
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              username
-            </label>
-            <input
-              type="username"
-              name="username"
-              id="username"
-              className="w-full p-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-              placeholder="username"
-              required
-            />
-          </div>
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="w-full p-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-              placeholder="email"
-              required
-            />
-          </div>
+        <form onSubmit={handleRegister} className="space-y-6">
+          <Input
+            required
+            name="username"
+            id="username"
+            label="Username"
+            value={formData.username}
+            onChange={handleChange}
+          />
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              className="w-full p-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              id="confirmPassword"
-              className="w-full p-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <input
-                id="agreeTerms"
-                type="checkbox"
-                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
-              />
-              <label
-                htmlFor="agreeTerms"
-                className="ml-2 text-sm text-gray-600"
+          <Input
+            required
+            type={visiblePassword ? "text" : "password"}
+            name="password"
+            id="password"
+            label="Password"
+            value={formData.password}
+            onChange={handleChange}
+            endContent={
+              <Button
+                isIconOnly
+                variant="light"
+                onClick={() => setVisiblePassword(!visiblePassword)}
               >
-                I agree to the terms and conditions
-              </label>
-            </div>
-          </div>
+                {visiblePassword ? <FaEye /> : <FaEyeSlash />}
+              </Button>
+            }
+          />
+
+          <Input
+            required
+            type={visibleConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            id="confirmPassword"
+            label="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            endContent={
+              <Button
+                isIconOnly
+                variant="light"
+                onClick={() =>
+                  setVisibleConfirmPassword(!visibleConfirmPassword)
+                }
+              >
+                {visibleConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+              </Button>
+            }
+          />
 
           <div>
-            <Button
-              radius="full"
-              className="w-full bg-gradient-to-tr from-blue-500 to-blue-700 text-white shadow-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 transition"
-            >
-              Sign up
+            <Button type="submit" fullWidth>
+              Register
             </Button>
           </div>
 
           <p className="text-center text-sm text-gray-500">
             Already have an account?{" "}
-            <Link href="/auth/login" className="font-medium text-blue-600 hover:underline">
-              Sign in
+            <Link
+              href="/auth/login"
+              className="font-medium text-blue-600 hover:underline"
+            >
+              Login
             </Link>
           </p>
         </form>
@@ -117,4 +156,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
