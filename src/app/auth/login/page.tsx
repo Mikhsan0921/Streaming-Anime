@@ -23,14 +23,14 @@ const Login = () => {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Your email
+              email
             </label>
             <input
               type="email"
               name="email"
               id="email"
               className="w-full p-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-              placeholder="username"
+              placeholder="email"
               required
             />
           </div>
