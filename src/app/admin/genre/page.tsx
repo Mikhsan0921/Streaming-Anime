@@ -131,27 +131,24 @@ export default function App() {
           <TableColumn>Label</TableColumn>
           <TableColumn>Actions</TableColumn>
         </TableHeader>
-        <TableBody emptyContent="No genres found">
+        <TableBody>
           {genres.map((genre: any) => (
             <TableRow key={genre.id_genre}>
               <TableCell>{genre.id_genre}</TableCell>
               <TableCell>{genre.label}</TableCell>
               <TableCell>
-                <Button
-                  variant="light"
-                  onPress={() => handleEdit(genre)}
-                  startContent={<FaRegPenToSquare />}
-                >
-                  Edit
-                </Button>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onPress={() => handleDelete(genre.id_genre)}
-                  startContent={<IoTrashOutline />}
-                >
-                  Delete
-                </Button>
+                <span className="flex flex-row gap-1">
+                  <Button isIconOnly onPress={() => handleEdit(genre)}>
+                    <FaRegPenToSquare />
+                  </Button>
+                  <Button
+                    color="danger"
+                    isIconOnly
+                    onPress={() => handleDelete(genre.id_genre)}
+                  >
+                    <IoTrashOutline />
+                  </Button>
+                </span>
               </TableCell>
             </TableRow>
           ))}

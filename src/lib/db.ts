@@ -8,3 +8,5 @@ export const createConnection = () => {
         database: process.env.DATABASE_NAME,
     });
 };
+
+export const closeConnection = (connection: any) => connection.end();

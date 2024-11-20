@@ -69,15 +69,6 @@ const SignUp = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       <section className="w-full max-w-md bg-content2 rounded-xl shadow-xl p-8 transform transition-all duration-300 ease-in-out">
-        <div className="flex justify-start items-center mb-6 ml-20 ">
-          <img
-            className="h-12 mr-2 ml-2"
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-            alt="logo"
-          />
-          <span className="text-3xl font-semibold">Admin</span>
-        </div>
-
         <h1 className="text-xl font-bold text-center mb-6">
           Create an account
         </h1>

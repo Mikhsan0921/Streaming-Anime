@@ -2,13 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground: #ffffff;
-  --background: #171717;
+body {
+  @apply flex flex-col items-center;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+#content {
+  @apply w-full max-w-[1400px] p-4;
 }

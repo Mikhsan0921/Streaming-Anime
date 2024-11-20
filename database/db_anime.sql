@@ -6,8 +6,8 @@ CREATE TABLE `anime` (
   `status` tinyint(1) DEFAULT NULL,
   `released` date DEFAULT NULL,
   `deskripsi` text,
-  `thumbnail` text,
-  `banner` text,
+  `thumbnail` longtext,
+  `banner` longtext,
   PRIMARY KEY (`id_anime`)
 );
 

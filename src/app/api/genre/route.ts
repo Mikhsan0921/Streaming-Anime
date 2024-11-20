@@ -1,4 +1,4 @@
-import { createConnection } from "@/lib/db";
+import { closeConnection, createConnection } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { parse } from "url";
 
@@ -10,6 +10,7 @@ export const POST = async (req: Request) => {
         const result: any = await db.query("INSERT INTO genre (label) VALUES (?)", [
             label,
         ]);
+        await closeConnection(db);
         return NextResponse.json(
             { message: "Genre created", id: result.insertId },
             { status: 201 }
@@ -39,6 +40,8 @@ export const GET = async (req: Request) => {
         }
 
         const [rows]: any = await db.query(query, values);
+        await closeConnection(db);
+
 
         if (id_genre && rows.length === 0) {
             return NextResponse.json({ message: "Genre not found" }, { status: 404 });
@@ -59,6 +62,8 @@ export const PUT = async (req: Request) => {
             "UPDATE genre SET label = ? WHERE id_genre = ?",
             [label, id_genre]
         );
+        await closeConnection(db);
+
 
         if (result.affectedRows === 0) {
             return NextResponse.json({ message: "Genre not found" }, { status: 404 });
@@ -79,6 +84,7 @@ export const DELETE = async (req: Request) => {
             "DELETE FROM genre WHERE id_genre = ?",
             [id_genre]
         );
+        await closeConnection(db);
 
         if (result.affectedRows === 0) {
             return NextResponse.json({ message: "Genre not found" }, { status: 404 });

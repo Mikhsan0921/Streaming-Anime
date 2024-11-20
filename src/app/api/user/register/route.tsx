@@ -1,4 +1,4 @@
-import { createConnection } from "@/lib/db";
+import { closeConnection, createConnection } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
@@ -30,6 +30,7 @@ export const POST = async (req: Request) => {
        VALUES (?, ?, ?)`,
       [username, encodedPassword, email]
     );
+    await closeConnection(db);
 
     // Respond with success
     return NextResponse.json(
