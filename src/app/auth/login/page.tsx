@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button, Input } from "@nextui-org/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
@@ -28,10 +28,6 @@ const Login = () => {
     const expires = new Date();
     expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
     document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
-  };
-
-  const getCookies = () => {
-    return document.cookie;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

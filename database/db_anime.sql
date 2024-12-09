@@ -4,7 +4,7 @@ CREATE TABLE `anime` (
   `judul` varchar(100) DEFAULT NULL,
   `sub_judul` varchar(100) DEFAULT NULL,
   `status` tinyint(1) DEFAULT NULL,
-  `released` date DEFAULT NULL,
+  `released` year DEFAULT NULL,
   `deskripsi` text,
   `thumbnail` longtext,
   `banner` longtext,
