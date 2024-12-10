@@ -1,6 +1,5 @@
 import { closeConnection, createConnection } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { parse } from "url";
 
 // CREATE: Add a new genre
 export const POST = async (req: Request) => {

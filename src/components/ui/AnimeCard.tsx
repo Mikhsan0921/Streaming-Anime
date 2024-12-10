@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
 import { FaPlay } from "react-icons/fa";
-import { RxCross1 } from "react-icons/rx";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 type AnimeProps = {
@@ -17,7 +15,6 @@ type AnimeProps = {
 };
 
 function AnimeCard({ id, title, src, released, episodeId }: AnimeProps) {
-  const router = useRouter();
   return (
     <motion.div
       className="relative w-[180px] h-[250px] lg:h-[300px] lg:w-[200px] rounded-lg hover:cursor-pointer"
