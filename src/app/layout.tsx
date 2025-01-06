@@ -3,7 +3,6 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme";
 import NavigationBar from "@/components/utils/Navbar";
-import { AuthProvider } from "@/components/providers/auth";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,10 +19,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            <NavigationBar />
-            <div id="content">{children}</div>
-          </AuthProvider>
+          <NavigationBar />
+          <div id="content">{children}</div>
         </ThemeProvider>
       </body>
     </html>

@@ -10,27 +10,24 @@ import {
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
-  Avatar,
   DropdownSection,
   User,
 } from "@nextui-org/react";
 import Theme from "./Theme";
-import { useAuthContext } from "../providers/auth";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FaUser } from "react-icons/fa6";
 import { VscSignOut } from "react-icons/vsc";
+import { signOut, useSession } from "next-auth/react";
 
 const NavigationBar = () => {
-  const { userProfile: user } = useAuthContext();
+  const { data: session } = useSession();
+
+  console.log(session?.user);
 
   const pathname = usePathname();
-  const router = useRouter();
 
   const handleLogout = () => {
-    document.cookie =
-      "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-    router.push("/auth/login");
+    signOut();
   };
 
   return (
@@ -69,10 +66,10 @@ const NavigationBar = () => {
           <DropdownTrigger className="flex items-center justify-center">
             <User
               as="button"
-              name={user?.username || "User"}
-              description={user?.role || "Role"}
+              name={session?.user?.name || "User"}
+              description={session?.user?.name || "Role"}
               avatarProps={{
-                src: user?.image,
+                src: session?.user?.image || "",
                 showFallback: true,
                 size: "sm",
                 className: "hover:opacity-50 transition-opacity",
@@ -108,14 +105,14 @@ const NavigationBar = () => {
                 textValue="User Information"
               >
                 <User
-                  name={user?.username || "User"}
-                  description={user?.email || "Email@example.com"}
+                  name={session?.user?.name || "User"}
+                  description={session?.user?.email || "Email@example.com"}
                   classNames={{
                     name: "capitalize",
                   }}
                   avatarProps={{
                     size: "sm",
-                    src: user?.image,
+                    src: session?.user?.image || "",
                   }}
                 />
               </DropdownItem>

@@ -1,96 +1,81 @@
-import { closeConnection, createConnection } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import dbConnect from '@/utils/dbConnect';
+import Genre from '@/models/Genre';
 
-// CREATE: Add a new genre
-export const POST = async (req: Request) => {
+// Function to generate a unique integer ID
+async function generateUniqueId() {
+    const lastGenre = await Genre.findOne().sort({ id: -1 }); // Get the last inserted genre
+    return lastGenre ? lastGenre.id + 1 : 1; // Increment ID or start from 1
+}
+
+// GET: Fetch all genres
+export async function GET() {
+    await dbConnect();
+
     try {
-        const { label } = await req.json();
-        const db = await createConnection();
-        const result: any = await db.query("INSERT INTO genre (label) VALUES (?)", [
-            label,
-        ]);
-        await closeConnection(db);
-        return NextResponse.json(
-            { message: "Genre created", id: result.insertId },
-            { status: 201 }
-        );
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        const genres = await Genre.find({});
+        return NextResponse.json(genres, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to fetch genres' }, { status: 500 });
     }
-};
+}
 
-// READ: Get all genresimport { createConnection } from "@/lib/db";
-export const GET = async (req: Request) => {
+// POST: Create a new genre
+export async function POST(req: Request) {
+    await dbConnect();
+
     try {
-        const db = await createConnection();
-        const { searchParams } = new URL(req.url);
-        const id_genre = searchParams.get("id");
-        const search = searchParams.get("search");
+        const body = await req.json();
+        const id = await generateUniqueId(); // Generate unique ID for the new genre
+        const newGenre = await Genre.create({ id, ...body });
 
-        let query = "SELECT * FROM genre";
-        let values: any[] = [];
+        return NextResponse.json(newGenre, { status: 201 });
+    } catch (error: any) {
+        return NextResponse.json({ error: 'Failed to create genre', details: error.message }, { status: 400 });
+    }
+}
 
-        if (id_genre) {
-            query += " WHERE id_genre = ?";
-            values.push(id_genre);
-        } else if (search) {
-            query += " WHERE label LIKE ?";
-            values.push(`%${search}%`);
+// PATCH: Update an existing genre by ID
+export async function PATCH(req: Request) {
+    await dbConnect();
+
+    try {
+        const body = await req.json();
+        const { id, ...updateData } = body;
+
+        if (!id) {
+            return NextResponse.json({ error: 'Genre ID is required for update' }, { status: 400 });
         }
 
-        const [rows]: any = await db.query(query, values);
-        await closeConnection(db);
-
-
-        if (id_genre && rows.length === 0) {
-            return NextResponse.json({ message: "Genre not found" }, { status: 404 });
+        const updatedGenre = await Genre.findOneAndUpdate({ id }, updateData, { new: true });
+        if (!updatedGenre) {
+            return NextResponse.json({ error: 'Genre not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ data: rows });
+        return NextResponse.json(updatedGenre, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to update genre', details: error.message }, { status: 400 });
     }
-};
-
-// UPDATE: Update a genre by ID
-export const PUT = async (req: Request) => {
-    try {
-        const { id_genre, label } = await req.json();
-        const db = await createConnection();
-        const [result]: any = await db.query(
-            "UPDATE genre SET label = ? WHERE id_genre = ?",
-            [label, id_genre]
-        );
-        await closeConnection(db);
-
-
-        if (result.affectedRows === 0) {
-            return NextResponse.json({ message: "Genre not found" }, { status: 404 });
-        }
-
-        return NextResponse.json({ message: "Genre updated" });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-};
+}
 
 // DELETE: Delete a genre by ID
-export const DELETE = async (req: Request) => {
-    try {
-        const { id_genre } = await req.json();
-        const db = await createConnection();
-        const [result]: any = await db.query(
-            "DELETE FROM genre WHERE id_genre = ?",
-            [id_genre]
-        );
-        await closeConnection(db);
+export async function DELETE(req: Request) {
+    await dbConnect();
 
-        if (result.affectedRows === 0) {
-            return NextResponse.json({ message: "Genre not found" }, { status: 404 });
+    try {
+        const { id } = await req.json();
+
+        if (!id) {
+            return NextResponse.json({ error: 'Genre ID is required for deletion' }, { status: 400 });
         }
 
-        return NextResponse.json({ message: "Genre deleted" });
+        const deletedGenre = await Genre.findOneAndDelete({ id });
+        if (!deletedGenre) {
+            return NextResponse.json({ error: 'Genre not found' }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: 'Genre deleted successfully' }, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to delete genre', details: error.message }, { status: 400 });
     }
-};
+}
