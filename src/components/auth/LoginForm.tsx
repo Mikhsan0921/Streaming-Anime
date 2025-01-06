@@ -17,10 +17,6 @@ export default function LoginForm() {
       redirect: true,
       callbackUrl: "/",
     });
-
-    if (!result?.ok) {
-      alert("Login failed");
-    }
   };
 
   return (

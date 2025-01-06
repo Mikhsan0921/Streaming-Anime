@@ -8,6 +8,7 @@ async function fetchGenresFromJikanAPI() {
     if (!response.ok) {
         throw new Error('Failed to fetch genres from Jikan API');
     }
+
     const data = await response.json();
     return data.data.map((genre: any) => ({
         id: genre.mal_id, // Map mal_id to id
