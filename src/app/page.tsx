@@ -39,15 +39,7 @@ export default function Home() {
         <p>{error}</p>
       ) : (
         <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
-          {anime.map((animeItem: any) => (
-            <AnimeCard
-              id={animeItem.id}
-              key={animeItem.id}
-              title={animeItem.judul}
-              src={animeItem.thumbnail}
-              released={animeItem.released}
-            />
-          ))}
+          <p>test</p>
         </div>
       )}
     </div>

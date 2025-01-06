@@ -22,7 +22,7 @@ export async function GET(req: Request) {
             filter.releaseDate = Number(releaseDate); // Filter by release year
         }
 
-        const animes = await Anime.find(filter);
+        const animes = await Anime.find(filter).populate('genres').populate('studio');
         return NextResponse.json(animes, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to fetch animes' }, { status: 500 });
@@ -54,7 +54,7 @@ export async function PATCH(req: Request) {
             return NextResponse.json({ error: 'Anime ID is required for update' }, { status: 400 });
         }
 
-        const updatedAnime = await Anime.findByIdAndUpdate(id, updateData, { new: true });
+        const updatedAnime = await Anime.findByIdAndUpdate(id, updateData, { new: true }).populate('genres').populate('studio');
         if (!updatedAnime) {
             return NextResponse.json({ error: 'Anime not found' }, { status: 404 });
         }

@@ -1,6 +1,7 @@
 import { GiKatana } from "react-icons/gi";
 import { FaTags, FaUser } from "react-icons/fa";
 import Link from "next/link";
+import { FaClapperboard } from "react-icons/fa6";
 
 const Page = () => {
   const path = [
@@ -15,6 +16,11 @@ const Page = () => {
       icon: FaTags,
     },
     {
+      name: "Studio",
+      url: "/studio",
+      icon: FaClapperboard,
+    },
+    {
       name: "User",
       url: "/user",
       icon: FaUser,
@@ -22,7 +28,7 @@ const Page = () => {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
       {path.map((item, index) => (
         <Link
           key={index}

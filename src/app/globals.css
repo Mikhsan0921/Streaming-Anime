@@ -7,5 +7,9 @@ body {
 }
 
 #content {
+  @apply w-full flex flex-col items-center justify-center;
+}
+
+.viewport-container {
   @apply w-full max-w-[1400px] p-4;
 }

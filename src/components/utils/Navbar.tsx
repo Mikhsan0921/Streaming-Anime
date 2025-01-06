@@ -35,7 +35,7 @@ const NavigationBar = () => {
         </Link>
       </NavbarBrand>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      {/* <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {[
           { href: "/admin/anime", label: "Anime" },
           { href: "/admin/genre", label: "Genre" },
@@ -50,7 +50,7 @@ const NavigationBar = () => {
             </Link>
           </NavbarItem>
         ))}
-      </NavbarContent>
+      </NavbarContent> */}
 
       <NavbarContent as="div" justify="end">
         {session && (
