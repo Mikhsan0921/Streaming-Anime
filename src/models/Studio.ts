@@ -12,6 +12,6 @@ const StudioSchema = new mongoose.Schema({
     },
 });
 
-const Studio = mongoose.models.Genre || mongoose.model('Studio', StudioSchema);
+const Studio = mongoose.models.Studio || mongoose.model('Studio', StudioSchema);
 
 export default Studio;

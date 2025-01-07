@@ -16,6 +16,7 @@ export async function GET(req: Request) {
         if (id) {
             const response = await fetchAnimeDetails(Number(id));
             const anime = response.data;
+            console.log(anime);
             const mappedAnime = {
                 id: anime.mal_id,
                 title: anime.title,

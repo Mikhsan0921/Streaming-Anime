@@ -25,6 +25,7 @@ export async function GET(req: Request) {
         const animes = await Anime.find(filter).populate('genres').populate('studio');
         return NextResponse.json(animes, { status: 200 });
     } catch (error) {
+        console.log(error);
         return NextResponse.json({ error: 'Failed to fetch animes' }, { status: 500 });
     }
 }

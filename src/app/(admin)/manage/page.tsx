@@ -28,17 +28,19 @@ const Page = () => {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-      {path.map((item, index) => (
-        <Link
-          key={index}
-          className="bg-primary p-6 rounded flex flex-col justify-center items-center gap-2 hover:scale-105 transition"
-          href={`/manage${item.url}`}
-        >
-          <item.icon size={50} />
-          <p className="font-bold">{item.name}</p>
-        </Link>
-      ))}
+    <div className="viewport-container">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+        {path.map((item, index) => (
+          <Link
+            key={index}
+            className="bg-primary p-6 rounded flex flex-col justify-center items-center gap-2 hover:scale-105 transition"
+            href={`/manage${item.url}`}
+          >
+            <item.icon size={50} />
+            <p className="font-bold">{item.name}</p>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

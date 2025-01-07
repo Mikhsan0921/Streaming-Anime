@@ -22,29 +22,28 @@ import {
 } from "@nextui-org/react";
 import { IoTrashOutline } from "react-icons/io5";
 import { FaRegPenToSquare } from "react-icons/fa6";
-import Link from "next/link";
 
-export default function App() {
+export default function StudioManagement() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selectedGenre, setSelectedGenre] = useState<any | null>(null);
-  const [genres, setGenres] = useState([]);
+  const [selectedStudio, setSelectedStudio] = useState<any | null>(null);
+  const [studios, setStudios] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchGenres = async () => {
+  const fetchStudios = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/anime");
+      const response = await fetch("/api/studio");
       const data = await response.json();
-      setGenres(data);
+      setStudios(data);
     } catch (error) {
-      console.error("Error fetching genres:", error);
+      console.error("Error fetching studios:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchGenres();
+    fetchStudios();
   }, []);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -54,10 +53,10 @@ export default function App() {
       const formData = new FormData(e.currentTarget as HTMLFormElement);
       const name = formData.get("name") as string;
 
-      const method = selectedGenre?.id ? "PATCH" : "POST";
-      const payload = { ...selectedGenre, name };
+      const method = selectedStudio?.id ? "PATCH" : "POST";
+      const payload = { ...selectedStudio, name };
 
-      const response = await fetch("/api/genre", {
+      const response = await fetch("/api/studio", {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -65,46 +64,46 @@ export default function App() {
 
       if (!response.ok) {
         throw new Error(
-          `Failed to ${method === "PATCH" ? "update" : "create"} genre`
+          `Failed to ${method === "PATCH" ? "update" : "create"} studio`
         );
       }
 
       alert(
-        `Genre ${method === "PATCH" ? "updated" : "created"} successfully!`
+        `Studio ${method === "PATCH" ? "updated" : "created"} successfully!`
       );
-      fetchGenres();
+      fetchStudios();
       onOpenChange();
     } catch (error) {
-      console.error("Error saving genre:", error);
+      console.error("Error saving studio:", error);
     }
   };
 
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch("/api/genre", {
+      const response = await fetch("/api/studio", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete genre");
+        throw new Error("Failed to delete studio");
       }
 
-      alert("Genre deleted successfully!");
-      fetchGenres();
+      alert("Studio deleted successfully!");
+      fetchStudios();
     } catch (error) {
-      console.error("Error deleting genre:", error);
+      console.error("Error deleting studio:", error);
     }
   };
 
-  const handleEdit = (genre: any) => {
-    setSelectedGenre(genre);
+  const handleEdit = (studio: any) => {
+    setSelectedStudio(studio);
     onOpen();
   };
 
   const handleCreate = () => {
-    setSelectedGenre({ name: "" });
+    setSelectedStudio({ name: "" });
     onOpen();
   };
 
@@ -114,14 +113,14 @@ export default function App() {
     { name: "ACTIONS", uid: "actions" },
   ];
 
-  const renderCell = React.useCallback((genre: any, columnKey: any) => {
-    const cellValue = genre[columnKey];
+  const renderCell = React.useCallback((studio: any, columnKey: any) => {
+    const cellValue = studio[columnKey];
 
     switch (columnKey) {
       case "actions":
         return (
           <span className="flex flex-row justify-center gap-1">
-            <Button isIconOnly onPress={() => handleEdit(genre)}>
+            <Button isIconOnly onPress={() => handleEdit(studio)}>
               <FaRegPenToSquare />
             </Button>
             <Popover placement="bottom" showArrow={true}>
@@ -133,16 +132,16 @@ export default function App() {
               <PopoverContent>
                 <div className="flex flex-col gap-1">
                   <p className="text-sm">
-                    Apakah anda yakin ingin menghapus Genre ini ?
+                    Are you sure you want to delete this Studio?
                   </p>
                   <div className="flex flex-row justify-end w-full">
                     <Button
                       color="danger"
                       size="sm"
                       startContent={<IoTrashOutline />}
-                      onPress={() => handleDelete(genre.id)}
+                      onPress={() => handleDelete(studio.id)}
                     >
-                      Hapus
+                      Delete
                     </Button>
                   </div>
                 </div>
@@ -157,14 +156,9 @@ export default function App() {
 
   return (
     <div className="viewport-container">
-      <div className="flex flex-row gap-2 mb-4">
-        <Link href="anime/sync">
-          <Button>Sync Anime</Button>
-        </Link>
-        <Button color="primary" onPress={handleCreate}>
-          Add New Anime
-        </Button>
-      </div>
+      <Button color="primary" onPress={handleCreate} className="mb-4">
+        Create New Studio
+      </Button>
       {loading ? (
         <p>Loading...</p>
       ) : (
@@ -179,7 +173,7 @@ export default function App() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={genres}>
+          <TableBody items={studios}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -196,13 +190,13 @@ export default function App() {
           {(onClose) => (
             <form onSubmit={handleSave}>
               <ModalHeader className="flex flex-col gap-1">
-                {selectedGenre?.id ? "Edit Genre" : "Create Genre"}
+                {selectedStudio?.id ? "Edit Studio" : "Create Studio"}
               </ModalHeader>
               <ModalBody>
                 <Input
                   name="name"
                   label="Name"
-                  defaultValue={selectedGenre?.name || ""}
+                  defaultValue={selectedStudio?.name || ""}
                   required
                 />
               </ModalBody>

@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Tabs, Tab, Button } from "@nextui-org/react";
-import { IAnime } from "@/models/Anime";
-import { FaCloudArrowDown, FaDownload, FaPlay } from "react-icons/fa6";
+import { Button } from "@nextui-org/react";
+import { FaCloudArrowDown } from "react-icons/fa6";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const [anime, setAnime] = useState<IAnime | null | any>(null);
+  const [anime, setAnime] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchAnime = async () => {
@@ -16,12 +17,37 @@ const Page = ({ params }: { params: { id: string } }) => {
         const data = await response.json();
         setAnime(data);
       } catch (error) {
-        console.error("Error fetching genres:", error);
+        console.error("Error fetching anime:", error);
       }
     };
 
     fetchAnime();
   }, [params.id]);
+
+  const handleImport = async () => {
+    setIsLoading(true);
+    setMessage("");
+    try {
+      const response = await fetch(`/api/anime/sync`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: params.id }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setMessage("Anime imported successfully!");
+      } else {
+        setMessage(result.error || "Failed to import anime.");
+      }
+    } catch (error) {
+      console.error("Error importing anime:", error);
+      setMessage("An error occurred while importing the anime.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -37,23 +63,36 @@ const Page = ({ params }: { params: { id: string } }) => {
       </div>
       <div className="absolute z-20 top-[40%] flex justify-center w-full">
         <div className="viewport-container mb-24">
-          <div className="flex md:mt-[-12rem] mt-[-6.25rem] md:flex-row flex-col md:items-end gap-10 ">
-            <div className="w-full max-w-[300px] flex flex-col gap-2">
+          <div className="flex md:mt-[-12rem] mt-[-6.25rem] md:flex-row flex-col md:items-end gap-10">
+            <div className="w-full max-w-[300px] flex flex-col gap-4">
               <Image
                 src={anime?.thumbnail || ""}
                 alt={anime?.title || "Title"}
                 height={20}
                 width={20}
-                className="h-full w-full object-cover rounded-md"
+                className="h-full w-full object-cover rounded-md hover:scale-105 hover:-translate-y-4 transition"
               />
               <Button
                 radius="sm"
                 size="lg"
                 startContent={<FaCloudArrowDown size={25} />}
                 className="font-bold"
+                isDisabled={isLoading}
+                onClick={handleImport}
               >
-                Import
+                {isLoading ? "Importing..." : "Import"}
               </Button>
+              {message && (
+                <p
+                  className={`text-sm mt-2 ${
+                    message.includes("successfully")
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {message}
+                </p>
+              )}
             </div>
             <div className="flex flex-col md:gap-5 gap-2 pb-16">
               <h1 className="md:text-5xl text-2xl md:font-black font-extrabold z-[9]">
