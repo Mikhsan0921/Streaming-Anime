@@ -68,8 +68,8 @@ export default function App({ searchParams }: any) {
         {loading ? (
           <p>Loading...</p>
         ) : data?.data?.length > 0 ? (
-          <div className="flex flex-col gap-4 items-center">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="flex flex-col gap-8 items-center">
+            <div className="flex flex-wrap gap-4">
               {data?.data?.map((anime: IAnime) => (
                 <AnimeCard
                   key={anime.id}

@@ -155,63 +155,65 @@ export default function App() {
   }, []);
 
   return (
-    <div>
-      <Button color="primary" onPress={handleCreate} className="mb-4">
-        Create New Genre
-      </Button>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <Table>
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
-              >
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={genres}>
-            {(item: any) => (
-              <TableRow key={item.id}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      )}
+    <div className="viewport-container">
+      <div>
+        <Button color="primary" onPress={handleCreate} className="mb-4">
+          Create New Genre
+        </Button>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <Table>
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn
+                  key={column.uid}
+                  align={column.uid === "actions" ? "center" : "start"}
+                >
+                  {column.name}
+                </TableColumn>
+              )}
+            </TableHeader>
+            <TableBody items={genres}>
+              {(item: any) => (
+                <TableRow key={item.id}>
+                  {(columnKey) => (
+                    <TableCell>{renderCell(item, columnKey)}</TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <form onSubmit={handleSave}>
-              <ModalHeader className="flex flex-col gap-1">
-                {selectedGenre?.id ? "Edit Genre" : "Create Genre"}
-              </ModalHeader>
-              <ModalBody>
-                <Input
-                  name="name"
-                  label="Name"
-                  defaultValue={selectedGenre?.name || ""}
-                  required
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" type="submit">
-                  Save
-                </Button>
-              </ModalFooter>
-            </form>
-          )}
-        </ModalContent>
-      </Modal>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <form onSubmit={handleSave}>
+                <ModalHeader className="flex flex-col gap-1">
+                  {selectedGenre?.id ? "Edit Genre" : "Create Genre"}
+                </ModalHeader>
+                <ModalBody>
+                  <Input
+                    name="name"
+                    label="Name"
+                    defaultValue={selectedGenre?.name || ""}
+                    required
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button color="primary" type="submit">
+                    Save
+                  </Button>
+                </ModalFooter>
+              </form>
+            )}
+          </ModalContent>
+        </Modal>
+      </div>
     </div>
   );
 }

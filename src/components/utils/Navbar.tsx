@@ -15,9 +15,10 @@ import {
 } from "@nextui-org/react";
 import Theme from "./Theme";
 import { usePathname } from "next/navigation";
-import { FaUser } from "react-icons/fa6";
+import { FaKey, FaUser } from "react-icons/fa6";
 import { VscSignOut } from "react-icons/vsc";
 import { signOut, useSession } from "next-auth/react";
+import { p } from "framer-motion/client";
 
 const NavigationBar = () => {
   const { data: session } = useSession();
@@ -121,6 +122,15 @@ const NavigationBar = () => {
                   textValue="Profile"
                 >
                   Profile
+                </DropdownItem>
+                <DropdownItem
+                  key="admin"
+                  href="/manage"
+                  startContent={<FaKey />}
+                  textValue="Admin"
+                  className={`${session?.user?.role !== "admin" && "hidden"}`}
+                >
+                  Admin
                 </DropdownItem>
               </DropdownSection>
               <DropdownSection aria-label="Settings" showDivider>

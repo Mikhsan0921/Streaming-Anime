@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import dbConnect from '@/utils/dbConnect';
 import User from '@/models/User';
@@ -27,7 +27,7 @@ export const authOptions = {
                     throw new Error('Invalid email or password');
                 }
 
-                return { id: user._id, email: user.email, name: user.name };
+                return { id: user._id, email: user.email, name: user.name, role: user.role };
             },
         }),
     ],
@@ -41,6 +41,7 @@ export const authOptions = {
                 token.id = user.id;
                 token.email = user.email;
                 token.name = user.name;
+                token.role = user.role;
             }
             return token;
         },

@@ -12,7 +12,7 @@ const AnimeCard = ({
   customUrl,
 }: {
   type: "episode" | "anime";
-  anime: JikanAnimeData | IAnime;
+  anime: IAnime;
   customUrl?: string;
 }) => {
   const urlMaker = () => {
@@ -28,7 +28,7 @@ const AnimeCard = ({
 
   return (
     <motion.div
-      className="relative w-[180px] h-[250px] lg:h-[300px] lg:w-[200px] group hover:cursor-pointer"
+      className="relative w-[200px] h-[300px] lg:h-[350px] lg:w-[250px] group hover:cursor-pointer"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1, transition: { delay: 0.05 } }}
       whileHover={{ scale: 1.05 }}
@@ -36,7 +36,7 @@ const AnimeCard = ({
       <Link href={urlMaker()}>
         <motion.div whileTap={{ scale: 0.9 }}>
           <div className="flex flex-col space-y-2 justify-between bg-base-300 shadow-xl relative">
-            <div className="relative w-full h-[250px] lg:h-[300px] overflow-hidden rounded-lg">
+            <div className="relative w-full h-[300px] lg:h-[350px] overflow-hidden rounded-lg">
               <div className="absolute top-0 left-0 w-full h-full bg-zinc-900/40 z-10 group-hover:bg-zinc-900/0 transition-all"></div>
               <Image
                 src={anime.thumbnail}
@@ -45,8 +45,8 @@ const AnimeCard = ({
                 fill
               />
             </div>
-            <div className="absolute bottom-0 p-2 flex flex-col w-full bg-gradient-to-b from-transparent to-primary-900 group-hover:to-primary-800 rounded-lg transition-all">
-              <p className="font-extrabold text-sm capitalize truncate text-white">
+            <div className="absolute bottom-0 p-2 flex flex-col justify-end w-full h-full max-h-[150px] bg-gradient-to-b from-transparent to-primary-900 group-hover:to-primary-800 rounded-lg transition-all">
+              <p className="font-extrabold text-sm capitalize text-ellipsis text-white">
                 {anime.title}
               </p>
               <div className="flex items-center justify-between">
