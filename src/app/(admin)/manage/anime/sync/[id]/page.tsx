@@ -117,7 +117,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <span className="col-span-2">{anime?.status}</span>
 
                 <h3>Studios</h3>
-                <span className="col-span-2">{anime?.studio}</span>
+                <span className="col-span-2">{anime?.studio.name}</span>
 
                 <h3>Rating</h3>
                 <span className="col-span-2">{anime?.rating}</span>

@@ -1,17 +1,19 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Input } from "@nextui-org/react";
+import { Input, Pagination } from "@nextui-org/react";
 import { FaSearch } from "react-icons/fa";
 import { useDebounce } from "use-debounce";
 import AnimeCard from "@/components/ui/AnimeCard";
 import { useRouter } from "next/navigation";
 import path from "path";
+import { IAnime } from "@/models/Anime";
 
 export default function App({ searchParams }: any) {
   const [query, setQuery] = useState(searchParams.q || "");
+  const [page, setPage] = useState<number>(Number(searchParams.page) || 1);
   const [debouncedQuery] = useDebounce(query, 500);
-  const [list, setList] = useState<any[]>([]);
+  const [data, setData] = useState<any>();
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -19,9 +21,11 @@ export default function App({ searchParams }: any) {
   const fetchGenres = async (searchTerm: string) => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/anime/sync?q=${searchTerm}`);
+      const response = await fetch(
+        `/api/anime/sync?q=${searchTerm}&page=${page}`
+      );
       const data = await response.json();
-      setList(data.data || []);
+      setData(data);
     } catch (error) {
       console.error("Error fetching genres:", error);
     } finally {
@@ -32,11 +36,17 @@ export default function App({ searchParams }: any) {
   useEffect(() => {
     if (searchParams.q || debouncedQuery.length >= 3) {
       fetchGenres(debouncedQuery);
-      router.push(path.resolve("/manage/anime/sync") + "?q=" + debouncedQuery);
+      router.push(
+        path.resolve("/manage/anime/sync") +
+          "?q=" +
+          debouncedQuery +
+          "&page=" +
+          page
+      );
     } else {
-      setList([]);
+      setData(null);
     }
-  }, [debouncedQuery]);
+  }, [debouncedQuery, page]);
 
   return (
     <div className="flex flex-col gap-4 viewport-container">
@@ -57,21 +67,28 @@ export default function App({ searchParams }: any) {
       <div>
         {loading ? (
           <p>Loading...</p>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {list.length > 0 ? (
-              list.map((anime) => (
+        ) : data?.data?.length > 0 ? (
+          <div className="flex flex-col gap-4 items-center">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {data?.data?.map((anime: IAnime) => (
                 <AnimeCard
-                  key={anime.mal_id}
+                  key={anime.id}
                   type="anime"
                   anime={anime}
                   customUrl="sync"
                 />
-              ))
-            ) : (
-              <p>No results found</p>
-            )}
+              ))}
+            </div>
+            <Pagination
+              isCompact
+              showControls
+              initialPage={page}
+              total={data?.pagination?.last_visible_page}
+              onChange={setPage}
+            />
           </div>
+        ) : (
+          <p>No results found</p>
         )}
       </div>
     </div>

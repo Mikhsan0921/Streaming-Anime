@@ -12,7 +12,7 @@ const AnimeCard = ({
   customUrl,
 }: {
   type: "episode" | "anime";
-  anime: IAnime;
+  anime: JikanAnimeData | IAnime;
   customUrl?: string;
 }) => {
   const urlMaker = () => {
