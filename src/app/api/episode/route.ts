@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/utils/dbConnect';
+
 import Anime from '@/models/Anime';
 
 // POST: Add an episode to an anime
 export async function POST(req: Request) {
-    await dbConnect();
 
     try {
         const { animeId, episode } = await req.json();
@@ -29,7 +28,6 @@ export async function POST(req: Request) {
 
 // PATCH: Update an episode in an anime
 export async function PATCH(req: Request) {
-    await dbConnect();
 
     try {
         const { animeId, episodeNumber, episodeData } = await req.json();
@@ -59,7 +57,6 @@ export async function PATCH(req: Request) {
 
 // DELETE: Remove an episode from an anime
 export async function DELETE(req: Request) {
-    await dbConnect();
 
     try {
         const { animeId, episodeNumber } = await req.json();
@@ -84,7 +81,6 @@ export async function DELETE(req: Request) {
 
 // GET: Fetch all episodes of an anime
 export async function GET(req: Request) {
-    await dbConnect();
 
     const { animeId } = Object.fromEntries(new URL(req.url).searchParams.entries());
 

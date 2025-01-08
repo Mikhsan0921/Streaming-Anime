@@ -13,12 +13,15 @@ const nextConfig = {
     ],
   },
   serverRuntimeConfig: {
-    apiBaseUrl: process.env.API_BASE_URL || "http://127.0.0.1:5221/api",
+    apiBaseUrl: process.env.API_BASE_URL || "http:/localhost:3000/api",
   },
   publicRuntimeConfig: {
     jikanAPI: process.env.JIKAN_API_URL || "https://api.jikan.moe/v4",
   },
   output: "standalone",
+  experimental: {
+    instrumentationHook: true,
+  },
 };
 
 export default nextConfig;

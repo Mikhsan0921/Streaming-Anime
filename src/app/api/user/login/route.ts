@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 
 export async function POST(req: Request) {
-    await dbConnect();
 
     try {
         // Get email and password from the request body
