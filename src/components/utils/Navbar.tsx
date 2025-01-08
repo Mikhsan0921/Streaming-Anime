@@ -1,6 +1,19 @@
 "use client";
 
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, DropdownSection, User, Button } from "@nextui-org/react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Link,
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  DropdownSection,
+  User,
+  Button,
+} from "@nextui-org/react";
 import Theme from "./Theme";
 import { usePathname } from "next/navigation";
 import { FaKey, FaUser } from "react-icons/fa6";
@@ -85,7 +98,12 @@ const NavigationBar = () => {
               }}
             >
               <DropdownSection aria-label="User" showDivider>
-                <DropdownItem isReadOnly key="user" className="h-14 gap-2 opacity-100" textValue="User Information">
+                <DropdownItem
+                  isReadOnly
+                  key="user"
+                  className="h-14 gap-2 opacity-100"
+                  textValue="User Information"
+                >
                   <User
                     name={session?.user?.name || "User"}
                     description={session?.user?.email || "Email@example.com"}
@@ -98,27 +116,48 @@ const NavigationBar = () => {
                     }}
                   />
                 </DropdownItem>
-                <DropdownItem key="profile" href="/profile" startContent={<FaUser />} textValue="Profile">
+                <DropdownItem
+                  key="profile"
+                  href="/profile"
+                  startContent={<FaUser />}
+                  textValue="Profile"
+                >
                   Profile
                 </DropdownItem>
-                <DropdownItem key="admin" href="/manage" startContent={<FaKey />} textValue="Admin" className={`${session?.user?.role !== "admin" && "hidden"}`}>
+                <DropdownItem
+                  key="admin"
+                  href="/manage"
+                  startContent={<FaKey />}
+                  textValue="Admin"
+                  className={`${session?.user?.role !== "admin" && "hidden"}`}
+                >
                   Admin
                 </DropdownItem>
               </DropdownSection>
               <DropdownSection aria-label="Settings" showDivider>
-                <DropdownItem isReadOnly key="theme" endContent={<Theme />} textValue="Tema">
+                <DropdownItem
+                  isReadOnly
+                  key="theme"
+                  endContent={<Theme />}
+                  textValue="Tema"
+                >
                   Tema
                 </DropdownItem>
               </DropdownSection>
               <DropdownSection aria-label="Help & Feedback">
-                <DropdownItem key="logout" startContent={<VscSignOut />} onClick={() => handleLogout()} textValue="Log Out">
+                <DropdownItem
+                  key="logout"
+                  startContent={<VscSignOut />}
+                  onClick={() => handleLogout()}
+                  textValue="Log Out"
+                >
                   Log Out
                 </DropdownItem>
               </DropdownSection>
             </DropdownMenu>
           </Dropdown>
         ) : (
-          <Link href="/login">
+          <Link href="/auth/login">
             <Button size="sm" variant="ghost" color="primary">
               Login
             </Button>
