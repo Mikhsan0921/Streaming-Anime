@@ -1,6 +1,6 @@
 import NextAuth, { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import dbConnect from '@/utils/dbConnect';
+
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 
@@ -13,7 +13,6 @@ const authOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                await dbConnect();
 
                 const { email, password } = credentials as { email: string; password: string };
 

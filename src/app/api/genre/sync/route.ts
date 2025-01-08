@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/utils/dbConnect';
+
 import Genre from '@/models/Genre';
 
 // Fetch genres from Jikan API
@@ -18,7 +18,6 @@ async function fetchGenresFromJikanAPI() {
 
 // Synchronize genres to the database
 async function syncGenresToDatabase(genres: { id: number; name: string }[]) {
-    await dbConnect();
 
     for (const genre of genres) {
         await Genre.updateOne(

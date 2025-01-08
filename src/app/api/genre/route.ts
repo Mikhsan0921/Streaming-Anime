@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/utils/dbConnect';
+
 import Genre from '@/models/Genre';
 
 // Function to generate a unique integer ID
@@ -10,7 +10,6 @@ async function generateUniqueId() {
 
 // GET: Fetch all genres
 export async function GET() {
-    await dbConnect();
 
     try {
         const genres = await Genre.find({});
@@ -22,7 +21,6 @@ export async function GET() {
 
 // POST: Create a new genre
 export async function POST(req: Request) {
-    await dbConnect();
 
     try {
         const body = await req.json();
@@ -37,7 +35,6 @@ export async function POST(req: Request) {
 
 // PATCH: Update an existing genre by ID
 export async function PATCH(req: Request) {
-    await dbConnect();
 
     try {
         const body = await req.json();
@@ -60,7 +57,6 @@ export async function PATCH(req: Request) {
 
 // DELETE: Delete a genre by ID
 export async function DELETE(req: Request) {
-    await dbConnect();
 
     try {
         const { id } = await req.json();

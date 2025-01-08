@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/utils/dbConnect';
+
 import Anime from '@/models/Anime';
 import Genre from '@/models/Genre';
 import Studio from '@/models/Studio';
@@ -106,7 +106,6 @@ export async function POST(req: Request) {
     }
 
     try {
-        await dbConnect();
 
         const anime = await fetchAnimeDetails(id);
 
