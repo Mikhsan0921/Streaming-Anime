@@ -4,7 +4,6 @@ import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
   Link,
   DropdownItem,
   DropdownTrigger,
@@ -20,6 +19,7 @@ import { FaKey, FaUser } from "react-icons/fa6";
 import { VscSignOut } from "react-icons/vsc";
 import { signOut, useSession } from "next-auth/react";
 import { p } from "framer-motion/client";
+import path from "path";
 
 const NavigationBar = () => {
   const { data: session } = useSession();
@@ -148,7 +148,7 @@ const NavigationBar = () => {
                 <DropdownItem
                   key="logout"
                   startContent={<VscSignOut />}
-                  onClick={() => handleLogout()}
+                  onPress={() => handleLogout()}
                   textValue="Log Out"
                 >
                   Log Out
@@ -157,11 +157,13 @@ const NavigationBar = () => {
             </DropdownMenu>
           </Dropdown>
         ) : (
-          <Link href="/auth/login">
-            <Button size="sm" variant="ghost" color="primary">
-              Login
-            </Button>
-          </Link>
+          !pathname.includes("auth") && (
+            <Link href="/auth/login">
+              <Button size="sm" variant="ghost" color="primary">
+                Login
+              </Button>
+            </Link>
+          )
         )}
       </NavbarContent>
     </Navbar>
