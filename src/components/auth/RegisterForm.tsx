@@ -38,7 +38,7 @@ export default function RegisterForm() {
         <Input
             required
             type="text"
-            placeholder=" "
+            placeholder="enter your name"
             id="username"
             label="Username"
             value={name}
@@ -47,7 +47,7 @@ export default function RegisterForm() {
         <Input
             required
             type="email"
-            placeholder=" "
+            placeholder="enter your email"
             id="email"
             label="Email"
             value={email}
@@ -57,7 +57,7 @@ export default function RegisterForm() {
         <Input
             required
             type={visiblePassword ? "text" : "password"}
-            placeholder=" "
+            placeholder="enter your password"
             id="password"
             label="Password"
             value={password}
