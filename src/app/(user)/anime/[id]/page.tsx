@@ -16,7 +16,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         const data = await response.json();
         setAnime(data);
       } catch (error) {
-        console.error("Error fetching genres:", error);
+        console.error("Error fetching anime data:", error);
       }
     };
 
@@ -24,71 +24,71 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [params.id]);
 
   return (
-    <div>
-      <div className="h-[30vh] md:h-[40vh] w-full relative ">
+    <div className="relative">
+      
+      <div className="h-[40vh] w-full relative">
         <Image
           src={anime?.thumbnail || ""}
-          alt={anime?.title || "Title"}
-          height={100}
-          width={100}
-          className="h-full w-full object-cover"
+          alt={anime?.title || "Anime Title"}
+          fill
+          className="object-cover"
           unoptimized
         />
-        <div className="absolute h-full w-full inset-0 m-auto bg-gradient-to-r from-slate-900 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-transparent"></div>
       </div>
-      <div className="absolute z-50 md:space-y-10 pb-20">
-        <div className="flex md:mt-[-9.375rem] mt-[-6.25rem] md:flex-row flex-col md:items-end md:gap-20 gap-10 ">
+
+      <div className="relative -mt-[15vh] px-5 md:px-20 z-10">
+        <div className="flex flex-col md:flex-row gap-10">
+    
           <Image
             src={anime?.thumbnail || ""}
-            alt={anime?.title || "Title"}
-            height={20}
-            width={20}
-            className="h-full w-full max-w-[300px] object-cover"
+            alt={anime?.title || "Anime Thumbnail"}
+            height={300}
+            width={200}
+            className="object-cover rounded-lg shadow-lg"
             unoptimized
           />
-          <div className="flex flex-col md:gap-5 gap-2 pb-16">
-            <h1 className="md:text-5xl text-2xl md:font-black font-extrabold z-[9]">
-              {anime?.title}
-            </h1>
 
-            <Button startContent={<FaPlay />}>Continue Watching</Button>
+          <div className="flex flex-col justify-end gap-5">
+            <h1 className="text-4xl md:text-5xl font-extrabold">
+              {anime?.title || "Anime Title"}
+            </h1>
+            <Button startContent={<FaPlay />}>Start Watching</Button>
           </div>
         </div>
-        <Tabs aria-label="Options" size="lg">
+
+        <Tabs aria-label="Anime Details" className="mt-10">
           <Tab key="overview" title="Overview">
-            <div className="w-full grid md:grid-cols-5 grid-cols-1 gap-x-20 gap-y-5 mt-10">
-              <div className="col-span-1 flex flex-col gap-5 w-full">
+            <div className="grid md:grid-cols-5 gap-5">
+
+              <div className="col-span-1">
                 <h3 className="text-xl font-semibold">Details</h3>
-                <div className="grid grid-cols-2 w-full md:text-base text-xs gap-y-2 gap-x-20 md:gap-x-0">
-                  <h3>Aired</h3>
-                  <span>{anime?.releaseDate}</span>
-
-                  <h3>Rating</h3>
-                  <span>{anime?.rating}</span>
-
-                  <h3>Genres</h3>
-                  <span>genres</span>
-
-                  <h3>Type</h3>
-                  <span>{anime?.type}</span>
-
-                  <h3>Status</h3>
-                  <span>{anime?.status}</span>
-
-                  <h3>Studios</h3>
-                  <span>test</span>
+                <div className="grid grid-cols-2 gap-x-10 gap-y-2 mt-2 text-sm">
+                  <div>Aired:</div>
+                  <div>{anime?.releaseDate || "Unknown"}</div>
+                  <div>Rating:</div>
+                  <div>{anime?.rating || "Unknown"}</div>
+                  <div>Genres:</div>
+                  <div>{anime?.genres?.join(", ") || "Unknown"}</div>
+                  <div>Type:</div>
+                  <div>{anime?.type || "Unknown"}</div>
+                  <div>Status:</div>
+                  <div>{anime?.status || "Unknown"}</div>
+                  <div>Studios:</div>
+                  <div>{anime?.studios || "Unknown"}</div>
                 </div>
               </div>
-              <div className="col-span-4 flex flex-col gap-5">
+
+              <div className="col-span-4">
                 <h3 className="text-xl font-semibold">Description</h3>
-                <p className="md:text-base text-xs leading-6">
-                  {anime?.description}
-                </p>
+                <p className="mt-2 text-sm leading-6">{anime?.description || "No description available."}</p>
               </div>
             </div>
           </Tab>
           <Tab key="episodes" title="Episodes">
-            <div></div>
+            <div>
+              <p className="text-sm">No episodes available.</p>
+            </div>
           </Tab>
         </Tabs>
       </div>
