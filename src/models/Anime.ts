@@ -6,7 +6,7 @@ interface IStream {
     quality: string;
 }
 
-interface IEpisode {
+export interface IEpisode {
     episodeNumber: number;
     title: string;
     streams: IStream[];

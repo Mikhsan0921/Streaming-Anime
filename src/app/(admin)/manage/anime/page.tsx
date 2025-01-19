@@ -84,7 +84,12 @@ export default function App() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {animes.length > 0 ? (
               animes.map((anime: IAnime) => (
-                <AnimeCard key={anime.id} type="anime" anime={anime} />
+                <AnimeCard
+                  key={anime.id}
+                  type="anime"
+                  anime={anime}
+                  customUrl="/manage/anime"
+                />
               ))
             ) : (
               <p>No results found</p>
