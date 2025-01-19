@@ -113,6 +113,7 @@ export async function POST(req: Request) {
         const studioId = await upsertStudio(anime.studios);
 
         const animeData = {
+            id: anime.mal_id,
             title: anime.title,
             subtitle: anime.title_synonyms,
             description: anime.synopsis,

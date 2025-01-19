@@ -38,7 +38,12 @@ export default function Home() {
           <div className="flex flex-wrap gap-4">
             {animes?.length > 0 ? (
               animes?.map((anime: IAnime) => (
-                <AnimeCard key={anime.id} type="anime" anime={anime} />
+                <AnimeCard
+                  key={anime.id}
+                  type="anime"
+                  anime={anime}
+                  customUrl="/anime"
+                />
               ))
             ) : (
               <p>No results found</p>

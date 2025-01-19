@@ -13,6 +13,7 @@ interface IEpisode {
 }
 
 export interface IAnime extends Document {
+    id: number;
     title: string;
     subtitle: string[];
     description: string;
@@ -40,6 +41,7 @@ const EpisodeSchema = new Schema<IEpisode>({
 });
 
 const AnimeSchema = new Schema<IAnime>({
+    id: { type: Number, required: true },
     title: { type: String, required: true },
     subtitle: { type: [String], default: [] },
     description: { type: String, required: true },
