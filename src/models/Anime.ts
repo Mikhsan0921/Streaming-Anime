@@ -13,6 +13,7 @@ export interface IEpisode {
 }
 
 export interface IAnime extends Document {
+    [x: string]: any;
     id: number;
     title: string;
     subtitle: string[];
