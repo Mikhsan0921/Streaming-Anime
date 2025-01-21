@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Tabs, Tab, Button } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/react";
 import { IAnime } from "@/models/Anime";
-import { FaPlay } from "react-icons/fa6";
+import EpisodeCard from "@/components/ui/EpisodeCard";
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [anime, setAnime] = useState<IAnime | null>(null);
@@ -12,11 +12,11 @@ const Page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     const fetchAnime = async () => {
       try {
-        const response = await fetch(`/api/anime/sync?id=${params.id}`);
+        const response = await fetch(`/api/anime?id=${params.id}`);
         const data = await response.json();
-        setAnime(data);
+        setAnime(data[0]);
       } catch (error) {
-        console.error("Error fetching anime data:", error);
+        console.error("Error fetching anime:", error);
       }
     };
 
@@ -24,42 +24,22 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [params.id]);
 
   return (
-    <div className="relative">
-      
-      <div className="h-[40vh] w-full relative">
+    <>
+      <div className="h-[30vh] md:h-[40vh] w-full relative flex flex-col items-center">
         <Image
-          src={anime?.thumbnail || ""}
-          alt={anime?.title || "Anime Title"}
-          fill
-          className="object-cover"
-          unoptimized
+          src={anime?.banner || ""}
+          alt={anime?.title || "Title"}
+          height={100}
+          width={100}
+          className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-transparent"></div>
+        <div className="absolute h-full w-full inset-0 m-auto bg-gradient-to-b from-transparent to-background"></div>
       </div>
-
-      <div className="relative -mt-[15vh] px-5 md:px-20 z-10">
-        <div className="flex flex-col md:flex-row gap-10">
-    
-          <Image
-            src={anime?.thumbnail || ""}
-            alt={anime?.title || "Anime Thumbnail"}
-            height={300}
-            width={200}
-            className="object-cover rounded-lg shadow-lg"
-            unoptimized
-          />
-
-          <div className="flex flex-col justify-end gap-5">
-            <h1 className="text-4xl md:text-5xl font-extrabold">
-              {anime?.title || "Anime Title"}
-            </h1>
-            <Button startContent={<FaPlay />}>Start Watching</Button>
-          </div>
-        </div>
-
-        <Tabs aria-label="Anime Details" className="mt-10">
-          <Tab key="overview" title="Overview">
-            <div className="grid md:grid-cols-5 gap-5">
+      <div className="absolute z-20 top-[40%] flex justify-center w-full">
+        <div className="viewport-container mb-24 flex flex-col gap-4">
+          <Tabs aria-label="Options" size="lg">
+            <Tab key="overview" title="Overview">
+              <div className="grid md:grid-cols-5 gap-5">
 
               <div className="col-span-1">
                 <h3 className="text-xl font-semibold">Details</h3>
@@ -84,15 +64,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <p className="mt-2 text-sm leading-6">{anime?.description || "No description available."}</p>
               </div>
             </div>
-          </Tab>
-          <Tab key="episodes" title="Episodes">
-            <div>
-              <p className="text-sm">No episodes available.</p>
-            </div>
-          </Tab>
-        </Tabs>
+            </Tab>
+            <Tab key="episodes" title="Episodes">
+              <div className="flex flex-col gap-4">
+                {anime?.episodeList?.length ? (
+                  anime.episodeList.map((ep: any) => (
+                    <EpisodeCard
+                      key={ep.episodeNumber}
+                      anime={anime}
+                      episode={ep}
+                      customUrl="/anime"
+                    />
+                  ))
+                ) : (
+                  <p className="text-sm">No episodes available.</p>
+                )}
+              </div>
+            </Tab>
+          </Tabs>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

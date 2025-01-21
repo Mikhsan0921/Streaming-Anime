@@ -101,7 +101,31 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className="viewport-container mb-24 flex flex-col gap-4">
           <Tabs aria-label="Options" size="lg">
             <Tab key="overview" title="Overview">
-              <p>{anime?.title}</p>
+            <div className="grid md:grid-cols-5 gap-5">
+
+              <div className="col-span-1">
+                <h3 className="text-xl font-semibold">Details</h3>
+                <div className="grid grid-cols-2 gap-x-10 gap-y-2 mt-2 text-sm">
+                  <div>Aired:</div>
+                  <div>{anime?.releaseDate || "Unknown"}</div>
+                  <div>Rating:</div>
+                  <div>{anime?.rating || "Unknown"}</div>
+                  <div>Genres:</div>
+                  <div>{anime?.genres?.join(", ") || "Unknown"}</div>
+                  <div>Type:</div>
+                  <div>{anime?.type || "Unknown"}</div>
+                  <div>Status:</div>
+                  <div>{anime?.status || "Unknown"}</div>
+                  <div>Studios:</div>
+                  <div>{anime?.studios || "Unknown"}</div>
+                </div>
+              </div>
+
+              <div className="col-span-4">
+                <h3 className="text-xl font-semibold">Description</h3>
+                <p className="mt-2 text-sm leading-6">{anime?.description || "No description available."}</p>
+              </div>
+              </div>
             </Tab>
             <Tab key="episodes" title="Episodes">
               <div className="flex justify-end mb-4">

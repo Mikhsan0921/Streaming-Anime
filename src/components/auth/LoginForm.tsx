@@ -28,7 +28,7 @@ export default function LoginForm() {
     <div className="flex justify-center items-center h-screen">
       <section className="w-full max-w-md bg-content2 rounded-xl shadow-xl p-8">
         <h1 className="text-xl font-bold text-center mb-6">
-          Sign in to your account
+          Login in to your account
         </h1>
         <form onSubmit={handleLogin} className="space-y-6">
           <Input
@@ -37,7 +37,7 @@ export default function LoginForm() {
             placeholder="Enter your email"
             name="username"
             id="username"
-            label="Username"
+            label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
