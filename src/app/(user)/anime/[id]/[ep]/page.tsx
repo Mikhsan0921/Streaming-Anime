@@ -27,10 +27,9 @@ const Page = ({ params }: { params: { id: string; ep: string } }) => {
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto p-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-   
           <div className="md:col-span-2">
             <div className="relative bg-black flex justify-center items-center overflow-hidden rounded-lg">
-              <div className="w-full aspect-video">
+              <div className="w-full aspect-video relative">
                 {anime ? (
                   embedHtml ? (
                     <div
@@ -50,7 +49,8 @@ const Page = ({ params }: { params: { id: string; ep: string } }) => {
             <div className="mt-4">
               <h2 className="text-2xl font-bold">{anime?.title}</h2>
               <p className="text-gray-400">
-                Episode {anime?.episodeList[parseInt(params.ep) - 1]?.episodeNumber} -{" "}
+                Episode{" "}
+                {anime?.episodeList[parseInt(params.ep) - 1]?.episodeNumber} -{" "}
                 {anime?.episodeList[parseInt(params.ep) - 1]?.title}
               </p>
             </div>
