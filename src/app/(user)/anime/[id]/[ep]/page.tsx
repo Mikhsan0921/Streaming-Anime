@@ -11,7 +11,9 @@ const Page = ({ params }: { params: { id: string; ep: string } }) => {
       try {
         const response = await fetch(`/api/anime?id=${params.id}`);
         const data = await response.json();
-        setAnime(data[0]);
+        setAnime(
+          data.find((anime: IAnime) => anime.id === parseInt(params.id))
+        );
       } catch (error) {
         console.error("Error fetching anime:", error);
       }
