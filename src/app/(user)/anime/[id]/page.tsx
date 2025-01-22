@@ -67,7 +67,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                 </div>
 
                 <div className="col-span-4">
-                  <h3 className="text-xl font-semibold">Description</h3>
+                  <h3 className="text-xl font-semibold">
+                    {anime?.title || "Unknown"}
+                  </h3>
                   <p className="mt-2 text-sm leading-6">
                     {anime?.description || "No description available."}
                   </p>
