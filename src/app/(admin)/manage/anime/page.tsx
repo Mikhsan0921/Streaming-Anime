@@ -81,7 +81,7 @@ export default function App() {
       ) : (
         <div>
           <p>{animes.length}</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="flex flex-wrap gap-4">
             {animes.length > 0 ? (
               animes.map((anime: IAnime) => (
                 <AnimeCard
